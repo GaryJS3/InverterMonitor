@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>InverterMonitor</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main>
+    <section class="toolbar">
+      <div>
+        <h1>InverterMonitor</h1>
+        <p id="subtitle">SRNE / Sun Gold Power SPH8048</p>
+      </div>
+      <div class="status-stack">
+        <div id="status" class="status">Waiting</div>
+        <div id="mqttStatus" class="status">MQTT Disabled</div>
+      </div>
+    </section>
+
+    <section class="settings">
+      <label>Gateway IP <input id="gatewayHost" value="10.44.0.173"></label>
+      <label>Port <input id="gatewayPort" type="number" value="4196"></label>
+      <label>Slave <input id="slaveId" type="number" value="1"></label>
+      <label>Poll ms <input id="pollIntervalMs" type="number" value="2000"></label>
+      <label>Inverter <select id="inverterDefinitionId"></select></label>
+      <label>Brand <input id="brand" value="SRNE / Sun Gold Power"></label>
+      <label>Model <input id="model" value="SPH8048"></label>
+      <label class="check"><input id="pollingEnabled" type="checkbox" checked> Polling</label>
+      <button id="save">Save</button>
+    </section>
+
+    <section class="settings">
+      <label class="check"><input id="mqttEnabled" type="checkbox"> MQTT</label>
+      <label>MQTT Host <input id="mqttHost" placeholder="mqtt.local"></label>
+      <label>MQTT Port <input id="mqttPort" type="number" value="1883"></label>
+      <label>Client ID <input id="mqttClientId" value="invertermonitor"></label>
+      <label>Topic Prefix <input id="mqttTopicPrefix" value="invertermonitor"></label>
+      <label>Username <input id="mqttUsername"></label>
+      <label>Password <input id="mqttPassword" type="password"></label>
+      <label class="check"><input id="mqttRetain" type="checkbox" checked> Retain</label>
+      <label class="check"><input id="mqttHomeAssistantDiscovery" type="checkbox" checked> Home Assistant Discovery</label>
+      <button id="saveMqtt">Save MQTT</button>
+      <div id="saveFeedback" class="save-feedback"></div>
+    </section>
+
+    <section class="grid">
+      <article>
+        <h2>Live Values</h2>
+        <div id="values" class="values"></div>
+      </article>
+      <article>
+        <h2>Debug</h2>
+        <pre id="debug"></pre>
+      </article>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

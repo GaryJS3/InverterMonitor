@@ -1,0 +1,55 @@
+# InverterMonitor
+
+C# Docker-first monitor for an SRNE / Sun Gold Power inverter over a Waveshare
+RS232/485/422 TO POE ETH bridge.
+
+The current implementation speaks raw Modbus RTU frames over TCP, matching the
+Waveshare `Protocol = None`, `TCP Server`, port `4196` setup.
+
+## Run Locally
+
+```powershell
+dotnet build --configfile .\NuGet.Config
+$env:ASPNETCORE_URLS='http://localhost:5099'
+.\bin\Debug\net10.0\InverterMonitor.exe
+```
+
+Open `http://localhost:5099`.
+
+## Build Container
+
+```powershell
+docker build -t invertermonitor .
+docker run --rm -p 8080:8080 invertermonitor
+```
+
+## Run With Docker Compose
+
+Copy `.env.example` to `.env`, adjust the gateway/MQTT values, then run:
+
+```powershell
+docker compose up -d --build
+```
+
+Open `http://localhost:8080`.
+
+The container reads initial settings from environment variables using the
+`Monitor__...` names in `.env.example`. Settings changed in the web UI apply at
+runtime, but are not persisted across container recreation yet.
+
+## Initial Known Settings
+
+- Gateway: `10.44.0.173`
+- Port: `4196`
+- Slave: `1`
+- Serial bridge mode: raw TCP / transparent / `Protocol = None`
+- Serial: `9600 8N1`
+
+MQTT publishing and Home Assistant discovery are wired. Discovery publishes
+retained config topics under `homeassistant/sensor/.../config` when enabled.
+
+## Inverter Definitions
+
+Each inverter model lives in `InverterDefinitions/*.json`. A definition includes
+brand/model metadata, protocol defaults, read behavior, and register entries.
+Register addresses may be decimal strings or hex strings such as `0x021B`.

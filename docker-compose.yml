@@ -1,0 +1,27 @@
+services:
+  invertermonitor:
+    build:
+      context: .
+    image: invertermonitor:local
+    container_name: invertermonitor
+    restart: unless-stopped
+    ports:
+      - "${INVERTERMONITOR_PORT:-8080}:8080"
+    environment:
+      Monitor__GatewayHost: "${MONITOR__GATEWAYHOST:-10.44.0.173}"
+      Monitor__GatewayPort: "${MONITOR__GATEWAYPORT:-4196}"
+      Monitor__SlaveId: "${MONITOR__SLAVEID:-1}"
+      Monitor__PollIntervalMs: "${MONITOR__POLLINTERVALMS:-2000}"
+      Monitor__InverterDefinitionId: "${MONITOR__INVERTERDEFINITIONID:-srne-sun-gold-sph8048}"
+      Monitor__Brand: "${MONITOR__BRAND:-SRNE / Sun Gold Power}"
+      Monitor__Model: "${MONITOR__MODEL:-SPH8048}"
+      Monitor__PollingEnabled: "${MONITOR__POLLINGENABLED:-true}"
+      Monitor__Mqtt__Enabled: "${MONITOR__MQTT__ENABLED:-false}"
+      Monitor__Mqtt__Host: "${MONITOR__MQTT__HOST:-10.44.0.32}"
+      Monitor__Mqtt__Port: "${MONITOR__MQTT__PORT:-1883}"
+      Monitor__Mqtt__ClientId: "${MONITOR__MQTT__CLIENTID:-invertermonitor}"
+      Monitor__Mqtt__TopicPrefix: "${MONITOR__MQTT__TOPICPREFIX:-invertermonitor}"
+      Monitor__Mqtt__Username: "${MONITOR__MQTT__USERNAME:-}"
+      Monitor__Mqtt__Password: "${MONITOR__MQTT__PASSWORD:-}"
+      Monitor__Mqtt__Retain: "${MONITOR__MQTT__RETAIN:-true}"
+      Monitor__Mqtt__HomeAssistantDiscovery: "${MONITOR__MQTT__HOMEASSISTANTDISCOVERY:-true}"
