@@ -19,10 +19,21 @@ public sealed class MonitorState
 
     public void UpdateSettings(MonitorSettings settings)
     {
-        Settings = Normalize(settings);
+        var normalized = Normalize(settings);
+        if (string.IsNullOrEmpty(settings.Mqtt.Password) && !string.IsNullOrEmpty(Settings.Mqtt.Password))
+        {
+            normalized = normalized with
+            {
+                Mqtt = normalized.Mqtt with { Password = Settings.Mqtt.Password }
+            };
+        }
+
+        Settings = normalized;
 
         Publish(snapshot with { Settings = Settings, UpdatedAt = DateTimeOffset.UtcNow });
     }
+
+    public MonitorSettings GetPublicSettings() => Settings.RedactSecrets();
 
     private static MonitorSettings Normalize(MonitorSettings settings)
     {
@@ -59,6 +70,8 @@ public sealed class MonitorState
         }
     }
 
+    public MonitorSnapshot GetPublicSnapshot() => GetSnapshot().RedactSecrets();
+
     public void Publish(MonitorSnapshot next)
     {
         lock (gate)
@@ -81,6 +94,14 @@ public sealed class MonitorState
             }
         }
     }
+
+    public async IAsyncEnumerable<MonitorSnapshot> WatchPublicAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        await foreach (var next in WatchAsync(cancellationToken))
+        {
+            yield return next.RedactSecrets();
+        }
+    }
 }
 
 public sealed record MonitorSnapshot(
@@ -94,6 +115,17 @@ public sealed record MonitorSnapshot(
 {
     public static MonitorSnapshot Empty(MonitorSettings settings) =>
         new(DateTimeOffset.UtcNow, settings, false, "Waiting for first poll.", MqttStatus.Disabled, [], []);
+
+    public MonitorSnapshot RedactSecrets() => this with { Settings = Settings.RedactSecrets() };
+}
+
+public static class MonitorSettingsExtensions
+{
+    public static MonitorSettings RedactSecrets(this MonitorSettings settings) =>
+        settings with
+        {
+            Mqtt = settings.Mqtt with { Password = "" }
+        };
 }
 
 public sealed record MqttStatus(

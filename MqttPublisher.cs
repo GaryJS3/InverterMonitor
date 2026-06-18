@@ -35,8 +35,9 @@ public sealed class MqttPublisher(ILogger<MqttPublisher> logger)
             await EnsureConnectedAsync(mqtt, cancellationToken);
 
             var prefix = SanitizeTopic(mqtt.TopicPrefix);
+            var publicSnapshot = snapshot.RedactSecrets();
             await PublishStringAsync($"{prefix}/status", snapshot.Connected ? "online" : "offline", mqtt.Retain, cancellationToken);
-            await PublishStringAsync($"{prefix}/snapshot", JsonSerializer.Serialize(snapshot, JsonOptions), mqtt.Retain, cancellationToken);
+            await PublishStringAsync($"{prefix}/snapshot", JsonSerializer.Serialize(publicSnapshot, JsonOptions), mqtt.Retain, cancellationToken);
 
             foreach (var reading in snapshot.Readings)
             {

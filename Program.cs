@@ -26,15 +26,15 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.MapGet("/api/settings", (MonitorState state) => state.Settings);
+app.MapGet("/api/settings", (MonitorState state) => state.GetPublicSettings());
 
 app.MapPost("/api/settings", (MonitorState state, MonitorSettings settings) =>
 {
     state.UpdateSettings(settings);
-    return Results.Ok(state.Settings);
+    return Results.Ok(state.GetPublicSettings());
 });
 
-app.MapGet("/api/readings", (MonitorState state) => state.GetSnapshot());
+app.MapGet("/api/readings", (MonitorState state) => state.GetPublicSnapshot());
 
 app.MapGet("/api/inverter-definitions", (RegisterCatalog catalog) => catalog.Definitions);
 
@@ -45,7 +45,7 @@ app.MapGet("/api/events", async (HttpContext context, MonitorState state) =>
     context.Response.Headers.Append("Cache-Control", "no-cache");
     context.Response.Headers.Append("Content-Type", "text/event-stream");
 
-    await foreach (var snapshot in state.WatchAsync(context.RequestAborted))
+    await foreach (var snapshot in state.WatchPublicAsync(context.RequestAborted))
     {
         var json = JsonSerializer.Serialize(snapshot, jsonOptions);
         await context.Response.WriteAsync($"data: {json}\n\n", context.RequestAborted);
