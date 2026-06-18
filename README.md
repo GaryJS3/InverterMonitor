@@ -6,6 +6,10 @@ Sun Gold Power inverter over a Waveshare RS232/485/422 TO POE ETH bridge.
 The current implementation speaks raw Modbus RTU frames over TCP, matching the
 Waveshare `Protocol = None`, `TCP Server`, port `4196` setup.
 
+Basic Web interface for editing config for testing and debugging. Although the pimrary purpose for this container is to bridge the Inverter via the Gateway back to MQTT/Home Assistant. 
+![InverterMonitor dashboard](docs/screenshot.png)
+
+
 ## Security Notice
 
 This app is intended only for internal deployment where the network layer is the
@@ -13,7 +17,12 @@ security boundary. The web UI and API are unauthenticated by design. Limit acces
 with Docker networking, VLANs, firewall rules, reverse-proxy authentication, or
 similar controls. Do not expose this app directly to the public internet.
 
-![InverterMonitor dashboard](docs/screenshot.png)
+
+## Vibes Warning 
+
+This was primarly thrown together with Codex/GPT 5.5 - it is really just for my personal use, but I am sharing in case it can help you either for reference or your own setup. Please feel free to submit issues or requests, if its something that makes sense within the scope of the project, I probably won't be against it. 
+
+Work done by the agent is reviewed by me but I don't read every single line. Use at your own risk.
 
 ## Run Locally
 
