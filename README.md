@@ -20,7 +20,7 @@ similar controls. Do not expose this app directly to the public internet.
 
 ## Vibes Warning 
 
-This was primarly thrown together with Codex/GPT 5.5 - it is really just for my personal use, but I am sharing in case it can help other either for reference or your own setup. Please feel free to submit issues or requests, if its something that makes sense within the scope of the project, I probably won't be against it. 
+This was primarly thrown together with Codex/GPT 5.5 - it is really just for my personal use, but I am sharing in case it can help you either for reference or your own setup. Please feel free to submit issues or requests, if its something that makes sense within the scope of the project, I probably won't be against it. 
 
 Work done by the agent is reviewed by me but I don't read every single line. Use at your own risk.
 
