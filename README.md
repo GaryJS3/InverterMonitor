@@ -81,6 +81,51 @@ an env file through the manager if supported.
 MQTT publishing and Home Assistant discovery are wired. Discovery publishes
 retained config topics under `homeassistant/sensor/.../config` when enabled.
 
+## Example Live Values
+
+Example values from an SRNE / Sun Gold Power SPH8048:
+
+| Value | Example | Register |
+| --- | ---: | --- |
+| Machine Type Code | `4` | `0x000B raw 4` |
+| Battery SOC | `100 %` | `0x0100 raw 100` |
+| Battery Voltage | `53.2 V` | `0x0101 raw 532` |
+| Battery Current | `0.3 A` | `0x0102 raw 3` |
+| Inverter Temp | `0 C` | `0x0103 raw 0` |
+| PV Voltage | `0 V` | `0x0107 raw 0` |
+| PV Current | `0 A` | `0x0108 raw 0` |
+| PV Power | `0 W` | `0x0109 raw 0` |
+| Charge State | `Charge off (0)` | `0x010B raw 0` |
+| Charger Power (Main + PV) | `0 W` | `0x010E raw 0` |
+| Fault Code 1 | `Normal (0)` | `0x0204 raw 0` |
+| Fault Code 2 | `Normal (0)` | `0x0205 raw 0` |
+| Current State Of Machine | `Initialization (2)` | `0x0210 raw 2` |
+| Grid Voltage | `117.1 V` | `0x0213 raw 1171` |
+| AC Current Leg 1 | `24.6 A` | `0x0214 raw 246` |
+| Grid Frequency | `59.99 Hz` | `0x0215 raw 5999` |
+| Inverter Voltage | `117.1 V` | `0x0216 raw 1171` |
+| Inverter Frequency | `59.99 Hz` | `0x0218 raw 5999` |
+| AC Current Leg 2 | `24.9 A` | `0x0219 raw 249` |
+| Load Apparent Power Leg 1 | `2890 VA` | `0x021B raw 2890` |
+| Load Apparent Power Leg 2 | `2985 VA` | `0x021C raw 2985` |
+| Load Power Factor | `0.39` | `0x021F raw 39` |
+| Nominal Battery Capacity | `100 Ah` | `0xE002 raw 100` |
+| Overcharge Voltage | `58 V` | `0xE008 raw 145` |
+| Overcharge Return Voltage | `58 V` | `0xE009 raw 145` |
+| Over Discharge Return Voltage | `52 V` | `0xE00B raw 130` |
+| Over Discharge Voltage | `42 V` | `0xE00D raw 105` |
+| Charge Cut-Off SOC | `5 %` | `0xE00F raw 5` |
+| Output Priority | `UTI (1)` | `0xE204 raw 1` |
+| Charger Priority | `Solar and utility (2)` | `0xE20F raw 2` |
+| Power Generation Of The Day | `0 kWh` | `0xF02F raw 0` |
+| Load Power Consumption Of The Day | `0.3 kWh` | `0xF030 raw 3` |
+| Accumulated Solar Generation | `5951.4 kWh` | `0xF038 raw 59514` |
+| Accumulated Load Consumption | `2199 kWh` | `0xF03A raw 21990` |
+| Load Apparent Power Total | `5875 VA` | derived |
+| Load Real Power Leg 1 Estimate | `1127.1 W` | derived |
+| Load Real Power Leg 2 Estimate | `1164.15 W` | derived |
+| Load Real Power Estimate | `2291.25 W` | derived |
+
 ## Inverter Definitions
 
 Each inverter model lives in `InverterDefinitions/*.json`. A definition includes
