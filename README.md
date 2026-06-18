@@ -37,6 +37,30 @@ The container reads initial settings from environment variables using the
 `Monitor__...` names in `.env.example`. Settings changed in the web UI apply at
 runtime, but are not persisted across container recreation yet.
 
+## Dockhand Or Other Git Stack Docker Managers
+
+For Docker managers that can deploy a Compose stack directly from Git, use:
+
+- Repository: `https://github.com/GaryJS3/InverterMonitor`
+- Stack name: `invertermonitor`
+- Compose file path: `docker-compose.yml`
+- Additional env file: leave blank unless your manager provides one
+
+Set these deploy options:
+
+- Build images on deploy: `ON`
+- Re-pull images: `OFF`
+- Force redeployment: `OFF`
+
+`Build images on deploy` is required because this repository currently builds
+the container image from the included `Dockerfile`. `Re-pull images` is only
+needed if the stack is changed later to use a prebuilt registry image such as
+`ghcr.io/...:latest`. `Force redeployment` is optional and normally not needed
+unless the stack should restart even when Git has no changes.
+
+Add the environment variables from `.env.example` in the manager UI, or provide
+an env file through the manager if supported.
+
 ## Initial Known Settings
 
 - Gateway: `10.44.0.173`
