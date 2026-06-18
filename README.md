@@ -1,7 +1,7 @@
 # InverterMonitor
 
-C# Docker-first monitor for an SRNE / Sun Gold Power inverter over a Waveshare
-RS232/485/422 TO POE ETH bridge.
+C# Docker-first monitor for my solar inverter, currently targeting an SRNE /
+Sun Gold Power inverter over a Waveshare RS232/485/422 TO POE ETH bridge.
 
 The current implementation speaks raw Modbus RTU frames over TCP, matching the
 Waveshare `Protocol = None`, `TCP Server`, port `4196` setup.
