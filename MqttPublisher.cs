@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using MQTTnet;
 
@@ -61,7 +63,9 @@ public sealed class MqttPublisher(ILogger<MqttPublisher> logger)
             }
 
             status = new MqttStatus(true, client?.IsConnected == true, "Published", DateTimeOffset.UtcNow, status.LastAttemptAt, null);
-            var discoveryNote = mqtt.HomeAssistantDiscovery ? " with Home Assistant discovery" : "";
+            var discoveryNote = mqtt.HomeAssistantDiscovery
+                ? $" and {snapshot.Readings.Count} retained Home Assistant discovery configs under {mqtt.HomeAssistantDiscoveryPrefix}"
+                : "";
             return (status, $"MQTT published {snapshot.Readings.Count} readings{discoveryNote} to {mqtt.Host}:{mqtt.Port}.");
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
@@ -75,7 +79,7 @@ public sealed class MqttPublisher(ILogger<MqttPublisher> logger)
 
     private async Task EnsureConnectedAsync(MqttSettings settings, CancellationToken cancellationToken)
     {
-        var connectionKey = $"{settings.Host}|{settings.Port}|{settings.ClientId}|{settings.Username}";
+        var connectionKey = $"{settings.Host}|{settings.Port}|{settings.ClientId}|{settings.Username}|{GetPasswordFingerprint(settings.Password)}";
         if (client is { IsConnected: true } && string.Equals(activeConnectionKey, connectionKey, StringComparison.Ordinal))
         {
             return;
@@ -126,7 +130,7 @@ public sealed class MqttPublisher(ILogger<MqttPublisher> logger)
         var discoveryNodeId = SanitizeTopicPart(prefix);
         var uniqueId = $"{discoveryNodeId}_{key}";
         var stateTopic = $"{prefix}/readings/{key}/value";
-        var configTopic = $"homeassistant/sensor/{discoveryNodeId}/{key}/config";
+        var configTopic = $"{SanitizeTopic(snapshot.Settings.Mqtt.HomeAssistantDiscoveryPrefix)}/sensor/{discoveryNodeId}/{key}/config";
         var payload = new Dictionary<string, object?>
         {
             ["name"] = reading.Name,
@@ -155,7 +159,7 @@ public sealed class MqttPublisher(ILogger<MqttPublisher> logger)
         if (deviceClass is not null)
         {
             payload["device_class"] = deviceClass;
-            payload["state_class"] = "measurement";
+            payload["state_class"] = deviceClass == "energy" ? "total_increasing" : "measurement";
         }
 
         await PublishStringAsync(configTopic, JsonSerializer.Serialize(payload, JsonOptions), true, cancellationToken);
@@ -204,6 +208,12 @@ public sealed class MqttPublisher(ILogger<MqttPublisher> logger)
         var parts = topic.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Select(SanitizeTopicPart);
         return string.Join('/', parts);
+    }
+
+    private static string GetPasswordFingerprint(string password)
+    {
+        var hash = SHA256.HashData(Encoding.UTF8.GetBytes(password));
+        return Convert.ToHexString(hash);
     }
 
     private static string SanitizeTopicPart(string value)

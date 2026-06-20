@@ -35,6 +35,7 @@ function setForm(settings) {
   mqttPassword.value = settings.mqtt.password ?? "";
   mqttRetain.checked = settings.mqtt.retain;
   mqttHomeAssistantDiscovery.checked = settings.mqtt.homeAssistantDiscovery;
+  mqttHomeAssistantDiscoveryPrefix.value = settings.mqtt.homeAssistantDiscoveryPrefix ?? "homeassistant";
   subtitle.textContent = `${settings.brand} ${settings.model}`;
 }
 
@@ -57,7 +58,8 @@ function getForm() {
       username: mqttUsername.value,
       password: mqttPassword.value,
       retain: mqttRetain.checked,
-      homeAssistantDiscovery: mqttHomeAssistantDiscovery.checked
+      homeAssistantDiscovery: mqttHomeAssistantDiscovery.checked,
+      homeAssistantDiscoveryPrefix: mqttHomeAssistantDiscoveryPrefix.value
     }
   };
 }

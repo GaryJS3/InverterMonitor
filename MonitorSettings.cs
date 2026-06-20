@@ -24,4 +24,5 @@ public sealed record MqttSettings
     public string Password { get; init; } = "";
     public bool Retain { get; init; } = true;
     public bool HomeAssistantDiscovery { get; init; } = true;
+    public string HomeAssistantDiscoveryPrefix { get; init; } = "homeassistant";
 }

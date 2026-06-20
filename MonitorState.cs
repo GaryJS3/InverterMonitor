@@ -51,6 +51,7 @@ public sealed class MonitorState
                 Port = Math.Clamp(settings.Mqtt.Port, 1, 65535),
                 ClientId = string.IsNullOrWhiteSpace(settings.Mqtt.ClientId) ? "invertermonitor" : settings.Mqtt.ClientId.Trim(),
                 TopicPrefix = NormalizeTopicPrefix(settings.Mqtt.TopicPrefix),
+                HomeAssistantDiscoveryPrefix = NormalizeDiscoveryPrefix(settings.Mqtt.HomeAssistantDiscoveryPrefix),
                 Username = settings.Mqtt.Username.Trim()
             }
         };
@@ -59,6 +60,12 @@ public sealed class MonitorState
     private static string NormalizeTopicPrefix(string value)
     {
         var trimmed = string.IsNullOrWhiteSpace(value) ? "invertermonitor" : value.Trim();
+        return trimmed.Trim('/');
+    }
+
+    private static string NormalizeDiscoveryPrefix(string value)
+    {
+        var trimmed = string.IsNullOrWhiteSpace(value) ? "homeassistant" : value.Trim();
         return trimmed.Trim('/');
     }
 
