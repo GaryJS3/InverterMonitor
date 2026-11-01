@@ -28,7 +28,7 @@ public sealed class InverterPollingService(
                 var rawValues = await modbus.ReadHoldingRegistersAsync(settings, definition, stoppingToken);
                 var readings = definition.Registers
                     .Where(definition => rawValues.ContainsKey(definition.Address))
-                    .Select(definition => ToReading(definition, rawValues[definition.Address]))
+                    .Select(definition => ToReading(definition, rawValues))
                     .ToList();
                 readings.AddRange(CreateDerivedReadings(definition, readings));
 
@@ -85,8 +85,14 @@ public sealed class InverterPollingService(
         }
     }
 
-    private static RegisterReading ToReading(RegisterDefinition definition, ushort raw)
+    private static RegisterReading ToReading(RegisterDefinition definition, IReadOnlyDictionary<int, ushort> rawValues)
     {
+        long raw = rawValues[definition.Address];
+        if (definition.ValueKind == RegisterValueKind.UnsignedDoubleWordLowFirst)
+        {
+            raw |= (long)rawValues[definition.Address + 1] << 16;
+        }
+
         var sourceValue = definition.ValueKind switch
         {
             RegisterValueKind.SignedWord => unchecked((short)raw),

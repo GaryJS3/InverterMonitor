@@ -136,6 +136,7 @@ public sealed record DerivedReadingDefinition
 public enum RegisterValueKind
 {
     UnsignedWord,
+    UnsignedDoubleWordLowFirst,
     SignedWord,
     HighByte,
     LowByte

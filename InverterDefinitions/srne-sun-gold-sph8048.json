@@ -217,8 +217,8 @@
     },
     { "key": "daily_pv_generation", "name": "Power Generation Of The Day", "group": "Energy", "address": "0xF02F", "unit": "kWh", "scale": 0.1 },
     { "key": "daily_load_consumption", "name": "Load Power Consumption Of The Day", "group": "Energy", "address": "0xF030", "unit": "kWh", "scale": 0.1 },
-    { "key": "accumulated_solar_generation", "name": "Accumulated Solar Generation", "group": "Energy", "address": "0xF038", "unit": "kWh", "scale": 0.1 },
-    { "key": "accumulated_load_consumption", "name": "Accumulated Load Consumption", "group": "Energy", "address": "0xF03A", "unit": "kWh", "scale": 0.1 }
+    { "key": "accumulated_solar_generation", "name": "Accumulated Solar Generation", "group": "Energy", "address": "0xF038", "valueKind": "unsignedDoubleWordLowFirst", "unit": "kWh", "scale": 0.1 },
+    { "key": "accumulated_load_consumption", "name": "Accumulated Load Consumption", "group": "Energy", "address": "0xF03A", "valueKind": "unsignedDoubleWordLowFirst", "unit": "kWh", "scale": 0.1 }
   ],
   "derivedReadings": [
     {

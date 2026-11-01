@@ -150,7 +150,7 @@ public sealed record RegisterReading(
     string Key,
     string Name,
     int Address,
-    int RawValue,
+    long RawValue,
     double? Value,
     string Unit,
     string FormattedValue,

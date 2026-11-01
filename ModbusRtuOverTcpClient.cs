@@ -18,7 +18,8 @@ public sealed class ModbusRtuOverTcpClient
         var values = new Dictionary<int, ushort>();
 
         foreach (var block in RegisterBlock.Create(
-                     definition.Registers.Select(d => d.Address),
+                     definition.Registers.SelectMany(d => Enumerable.Range(d.Address,
+                         d.ValueKind == RegisterValueKind.UnsignedDoubleWordLowFirst ? 2 : 1)),
                      definition.ReadBehavior.MaxBlockSize,
                      definition.ReadBehavior.MaxGapWithinBlock))
         {
