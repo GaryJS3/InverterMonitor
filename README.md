@@ -89,6 +89,9 @@ an env file through the manager if supported.
 
 MQTT publishing and Home Assistant discovery are wired. Discovery publishes
 retained config topics under `homeassistant/sensor/.../config` when enabled.
+Fault Code 1 and Fault Code 2 use the `/formatted` state topics so Home Assistant
+shows descriptions such as `Normal (0)` or `Inverter overload protection (14)`.
+Numeric codes remain available on the `/value` and `/raw` topics.
 
 ## Example Live Values
 

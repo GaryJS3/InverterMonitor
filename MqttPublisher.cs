@@ -129,7 +129,8 @@ public sealed class MqttPublisher(ILogger<MqttPublisher> logger)
     {
         var discoveryNodeId = SanitizeTopicPart(prefix);
         var uniqueId = $"{discoveryNodeId}_{key}";
-        var stateTopic = $"{prefix}/readings/{key}/value";
+        var stateField = reading.Key is "fault_code_1" or "fault_code_2" ? "formatted" : "value";
+        var stateTopic = $"{prefix}/readings/{key}/{stateField}";
         var configTopic = $"{SanitizeTopic(snapshot.Settings.Mqtt.HomeAssistantDiscoveryPrefix)}/sensor/{discoveryNodeId}/{key}/config";
         var payload = new Dictionary<string, object?>
         {
